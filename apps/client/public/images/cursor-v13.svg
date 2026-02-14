@@ -1,0 +1,29 @@
+<svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" shape-rendering="crispEdges">
+  <!-- 
+    CURSOR V13: THE "CRISP" SOLUTION
+    shape-rendering="crispEdges" turns off anti-aliasing, creating that perfect RETRO PIXEL look 
+    from a clean vector source.
+  -->
+
+  <!-- REAL MACAW (Photo) -->
+  <image href="/images/cursor-real-v7-purewhite.png" x="24" y="0" width="24" height="24" />
+  <!-- Note: I am using the v7 image which had the macaw isolated (mostly) or I can use v9-isolated. 
+       Let's use v9-isolated for best quality bird. 
+  -->
+  <image href="/images/macaw-v9-isolated.png" x="22" y="2" width="26" height="26" />
+
+  <!-- RETRO HAND (Vector aiming for Pixel Perfection) -->
+  <g transform="translate(0, 14)">
+    <!-- White Fill -->
+    <path d="M12 2 L12 16 L8 16 L8 18 L4 18 L4 20 L2 20 L2 26 L6 26 L6 28 L10 28 L10 30 L16 30 L16 28 L18 28 L18 26 L22 26 L22 24 L24 24 L24 20 L22 20 L22 18 L20 18 L20 16 L18 16 L18 14 L16 14 L16 12 L14 12 L14 2 Z" fill="white" />
+    
+    <!-- Black Outline -->
+    <path d="M12 0 L12 2 L14 2 L14 12 L16 12 L16 14 L18 14 L18 16 L20 16 L20 18 L22 18 L22 20 L24 20 L24 24 L22 24 L22 26 L18 26 L18 28 L16 28 L16 30 L10 30 L10 28 L6 28 L6 26 L2 26 L2 20 L4 20 L4 18 L8 18 L8 16 L10 16 L10 14 L12 14 L12 0 Z M 12 2 L 12 16 L 8 16 L 8 18 L 4 18 L 4 20 L 2 20 L 2 26 ... " stroke="black" stroke-width="2" />
+    
+    <!-- Simple reconstruction of outline using stroke is risky for crispness. 
+         Let's just use a solid path behind it. 
+    -->
+    <path d="M10 0 L14 0 L14 12 L16 12 L16 14 L18 14 L18 16 L20 16 L20 18 L22 18 L22 20 L24 20 L24 26 L22 26 L22 28 L18 28 L18 30 L16 30 L16 32 L10 32 L10 30 L6 30 L6 28 L2 28 L2 20 L4 20 L4 18 L8 18 L8 16 L10 16 L10 0 Z" fill="black" />
+    <path d="M12 2 L12 14 L10 14 L10 16 L8 16 L8 18 L4 18 L4 20 L4 26 L6 26 L6 28 L10 28 L10 30 L14 30 L14 28 L18 28 L18 26 L20 26 L20 24 L22 24 L22 20 L20 20 L20 18 L18 18 L18 16 L16 16 L16 14 L14 14 L14 2 Z" fill="white" />
+  </g>
+</svg>

@@ -1,0 +1,42 @@
+<svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Professional Cursor Arrow (Standard Geometry) -->
+  <g filter="url(#dropShadow)">
+    <path d="M4 2L13 22L16.5 14.5L24 12L4 2Z" fill="white" stroke="black" stroke-width="1.5" stroke-linejoin="round"/>
+  </g>
+
+  <!-- Detailed Scarlet Macaw (Perched/Flying on top right) -->
+  <g transform="translate(14, 2) scale(0.6)">
+    <!-- Tail Feathers (Long, elegant) -->
+    <path d="M20 25C20 25 15 30 12 35" stroke="#3B82F6" stroke-width="3" stroke-linecap="round"/>
+    <path d="M18 24C18 24 14 28 12 32" stroke="#EF4444" stroke-width="3" stroke-linecap="round"/>
+
+    <!-- Wing (Detailed Layers) -->
+    <path d="M8 12C8 12 2 10 2 16C2 22 10 20 12 18" fill="#FACC15"/> <!-- Yellow underwing -->
+    <path d="M8 12C8 12 3 9 3 14C3 18 8 16 10 15" fill="#1D4ED8"/> <!-- Blue Wing tip -->
+    <path d="M12 10C10 5 18 5 20 8C22 11 15 15 12 12Z" fill="#EF4444"/> <!-- Red Shoulder -->
+
+    <!-- Body & Head -->
+    <path d="M12 18C15 22 20 20 22 15C24 10 22 5 18 4C14 3 10 8 12 18Z" fill="#EF4444"/>
+
+    <!-- Face Details -->
+    <path d="M17 5C17 5 19 5 20 7C21 9 19 10 17 9" fill="#FFFBEB"/> <!-- White Face Patch -->
+    <circle cx="18.5" cy="7.5" r="1" fill="black"/> <!-- Eye -->
+    
+    <!-- Beak -->
+    <path d="M16 9C16 9 14 11 15 12" stroke="black" stroke-width="2" stroke-linecap="round"/> <!-- Lower Beak -->
+    <path d="M17 5C16 5 13 7 14 10C15 11 17 9 17 9" fill="#1F2937"/> <!-- Upper Beak -->
+  </g>
+
+  <defs>
+    <filter id="dropShadow" x="0" y="0" width="32" height="32" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+      <feFlood flood-opacity="0" result="BackgroundImageFix"/>
+      <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
+      <feOffset dy="1"/>
+      <feGaussianBlur stdDeviation="1"/>
+      <feComposite in2="hardAlpha" operator="out"/>
+      <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.25 0"/>
+      <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow"/>
+      <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow" result="shape"/>
+    </filter>
+  </defs>
+</svg>

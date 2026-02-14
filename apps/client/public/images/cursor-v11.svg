@@ -1,0 +1,29 @@
+<svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- 
+    CURSOR V11: STANDARD PIXEL HAND + REAL MACAW
+    Using the standard "link select" hand geometry to avoid "blob" shapes.
+  -->
+
+  <!-- MACAW (Raster Image) form previous isolation -->
+  <image href="/images/macaw-v9-isolated.png" x="22" y="0" width="26" height="26" />
+
+  <!-- PIXEL ART HAND (Standard "Link" Cursor) -->
+  <!-- White fill, Black stroke. -->
+  <g filter="url(#shadow)" transform="translate(0, 12)"> 
+    <!-- 
+      Standard logic:
+      Index finger tip at (6,0) local.
+      Main body of hand below.
+    -->
+    <path d="M6 0  L6 14  L2 14  L2 18  L0 18  L0 20  L2 20  L2 22  L4 22  L4 24  L6 24  L6 26  L8 26  L8 28  L12 28  L12 26  L14 26  L14 24  L16 24  L16 22  L18 22  L18 20  L16 20  L16 18  L14 18  L14 16  L12 16  L12 14  L10 14  L10 0  Z" fill="white" stroke="black" stroke-width="2" stroke-linejoin="round" />
+    
+    <!-- Thumb bump -->
+    <path d="M0 18 H2" stroke="white" stroke-width="1" />
+  </g>
+
+  <defs>
+    <filter id="shadow">
+      <feDropShadow dx="0" dy="1" stdDeviation="1" flood-opacity="0.3"/>
+    </filter>
+  </defs>
+</svg>

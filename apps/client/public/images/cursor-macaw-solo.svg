@@ -1,0 +1,14 @@
+<svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- 
+    CURSOR MACAW SOLO
+    Encapsulating the cropped png in SVG to ensure correct rendering.
+  -->
+  <image href="/images/macaw-final-crop.png" x="0" y="0" width="48" height="48" />
+  
+  <!-- Optional: Add a subtle drop shadow filter to ensure visibility against white backgrounds if the user wants -->
+  <defs>
+    <filter id="shadow" x="-2" y="-2" width="52" height="52">
+      <feDropShadow dx="0" dy="1" stdDeviation="1" flood-opacity="0.5"/>
+    </filter>
+  </defs>
+</svg>

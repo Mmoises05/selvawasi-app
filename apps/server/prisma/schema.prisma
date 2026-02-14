@@ -1,0 +1,162 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// Enum Role removed for SQLite compatibility
+// Role values: ADMIN, OPERATOR, TOURIST, RESTAURANT_OWNER, AGENCY_OWNER
+
+model User {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  password  String
+  fullName  String?
+  role      String   @default("TOURIST")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  // Relations
+  operatorInfo   Operator?
+  restaurantInfo Restaurant?
+  bookings       Booking[]
+  reviews        Review[]
+  restaurantReservations RestaurantReservation[]
+}
+
+model Operator {
+  id          String   @id @default(uuid())
+  companyName String
+  description String?
+  logoUrl     String?
+  userId      String   @unique
+  user        User     @relation(fields: [userId], references: [id])
+  boats       Boat[]
+  experiences Experience[]
+  createdAt   DateTime @default(now())
+}
+
+model Experience {
+  id          String   @id @default(uuid())
+  title       String
+  description String
+  price       Decimal
+  duration    String
+  location    String
+  operatorId  String
+  operator    Operator @relation(fields: [operatorId], references: [id])
+  images      String   // SQLite: JSON string of URLs
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  bookings    Booking[]
+}
+
+model Boat {
+  id          String     @id @default(uuid())
+  name        String
+  capacity    Int
+  operatorId  String
+  operator    Operator   @relation(fields: [operatorId], references: [id])
+  schedules   Schedule[]
+  features    String?    // SQLite: JSON string of features
+}
+
+model Route {
+  id          String     @id @default(uuid())
+  origin      String
+  destination String
+  duration    Int        // Minutes
+  distance    Float?     // km
+  schedules   Schedule[]
+}
+
+model Schedule {
+  id            String    @id @default(uuid())
+  departureTime DateTime
+  arrivalTime   DateTime
+  boatId        String
+  boat          Boat      @relation(fields: [boatId], references: [id])
+  routeId       String
+  route         Route     @relation(fields: [routeId], references: [id])
+  prices        Price[]
+  bookings      Booking[]
+}
+
+model Price {
+  id         String   @id @default(uuid())
+  amount     Decimal
+  currency   String   @default("PEN")
+  seatType   String   // General, VIP, etc.
+  scheduleId String
+  schedule   Schedule @relation(fields: [scheduleId], references: [id])
+}
+
+model Booking {
+  id         String   @id @default(uuid())
+  userId     String
+  user       User     @relation(fields: [userId], references: [id])
+  scheduleId String?
+  schedule   Schedule? @relation(fields: [scheduleId], references: [id])
+  experienceId String?
+  experience Experience? @relation(fields: [experienceId], references: [id])
+  status     String   // PENDING, CONFIRMED, CANCELLED
+  totalPrice Decimal
+  seatNumber        String?
+  passengerName     String?
+  passengerDocType  String?
+  passengerDocNumber String?
+  createdAt         DateTime @default(now())
+}
+
+model Restaurant {
+  id          String   @id @default(uuid())
+  name        String
+  description String?
+  address     String?
+  userId      String   @unique
+  user        User     @relation(fields: [userId], references: [id])
+  dishes      Dish[]
+  reviews     Review[]
+  reservations RestaurantReservation[]
+}
+
+model Dish {
+  id           String     @id @default(uuid())
+  name         String
+  description  String?
+  price        Decimal
+  restaurantId String
+  restaurant   Restaurant @relation(fields: [restaurantId], references: [id])
+  imageUrl     String?
+}
+
+model Review {
+  id           String      @id @default(uuid())
+  rating       Int
+  comment      String?
+  userId       String
+  user         User        @relation(fields: [userId], references: [id])
+  restaurantId String?
+  restaurant   Restaurant? @relation(fields: [restaurantId], references: [id])
+  createdAt    DateTime    @default(now())
+}
+
+model RestaurantReservation {
+  id            String   @id @default(uuid())
+  restaurantId  String
+  restaurant    Restaurant @relation(fields: [restaurantId], references: [id])
+  userId        String
+  user          User     @relation(fields: [userId], references: [id])
+  status        String   @default("PENDING_APPROVAL") // PENDING_APPROVAL, CONFIRMED, REJECTED, CANCELLED
+  pax           Int
+  requestedDate DateTime
+  operatorNote  String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
