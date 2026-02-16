@@ -41,6 +41,7 @@ export default function ExperienceDetailPage() {
     const [scrollY, setScrollY] = useState(0);
     const [date, setDate] = useState<Date | undefined>(undefined);
     const [travelers, setTravelers] = useState(2);
+    const [calendarOpen, setCalendarOpen] = useState(false);
 
     // Parallax Effect
     useEffect(() => {
@@ -242,7 +243,7 @@ export default function ExperienceDetailPage() {
                             <div className="space-y-6">
                                 <div className="space-y-2">
                                     <label className="text-sm text-slate-400 font-bold uppercase tracking-wider ml-1">Fecha</label>
-                                    <Popover>
+                                    <Popover open={calendarOpen} onOpenChange={setCalendarOpen}>
                                         <PopoverTrigger asChild>
                                             <Button variant="outline" className={cn(
                                                 "w-full justify-start h-14 rounded-2xl border-white/10 bg-white/5 text-left text-base hover:bg-white/10 hover:text-white",
@@ -256,7 +257,10 @@ export default function ExperienceDetailPage() {
                                             <Calendar
                                                 mode="single"
                                                 selected={date}
-                                                onSelect={setDate}
+                                                onSelect={(d) => {
+                                                    setDate(d);
+                                                    setCalendarOpen(false);
+                                                }}
                                                 initialFocus
                                                 disabled={(date) => date < new Date()}
                                                 className="rounded-xl border border-slate-800 text-slate-200"
