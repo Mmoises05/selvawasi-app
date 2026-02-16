@@ -17,7 +17,7 @@ import {
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
-export function Navbar({ className }: { className?: string }) {
+export function Navbar({ className, variant = "default" }: { className?: string; variant?: "default" | "transparent" }) {
     const [scrolled, setScrolled] = useState(false);
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
     const { user, isAuthenticated, logout, openLoginModal, closeLoginModal, isLoginModalOpen } = useAuth();
