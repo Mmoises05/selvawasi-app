@@ -1,10 +1,17 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, Request } from '@nestjs/common';
 import { BookingsService } from './bookings.service';
 import { Prisma } from '@prisma/client';
+import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 
 @Controller('bookings')
 export class BookingsController {
     constructor(private readonly bookingsService: BookingsService) { }
+
+    @UseGuards(JwtAuthGuard)
+    @Get('my-bookings')
+    findMyBookings(@Request() req: any) {
+        return this.bookingsService.findAllByUser(req.user.userId);
+    }
 
     @Post()
     create(@Body() createBookingDto: Prisma.BookingCreateInput) {

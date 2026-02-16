@@ -85,4 +85,20 @@ export class BookingsService {
     async remove(id: string): Promise<Booking> {
         return this.prisma.booking.delete({ where: { id } });
     }
+
+    async findAllByUser(userId: string): Promise<Booking[]> {
+        return this.prisma.booking.findMany({
+            where: { userId },
+            include: {
+                schedule: {
+                    include: {
+                        boat: true,
+                        route: true
+                    }
+                },
+                experience: true
+            },
+            orderBy: { createdAt: 'desc' }
+        });
+    }
 }

@@ -4,12 +4,15 @@ import { useAuth } from "@/context/auth-context";
 import { Navbar } from "@/components/layout/navbar";
 import { Footer } from "@/components/layout/footer";
 import { Button } from "@/components/ui/button";
-import { User, Mail, Shield, Edit2, LogOut, MapPin, Calendar, CreditCard, Camera, Star } from "lucide-react";
+import { User, Mail, Shield, Edit2, LogOut, MapPin, Calendar, CreditCard, Camera, Star, Ship } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import { authService } from "@/services/auth.service";
+import { marketplaceService } from "@/services/marketplace.service";
 import { Badge } from "@/components/ui/badge";
+import { format } from "date-fns";
+import { es } from "date-fns/locale";
 
 export default function ProfilePage() {
     const { user, isAuthenticated, logout } = useAuth();
@@ -18,6 +21,10 @@ export default function ProfilePage() {
     const [editedName, setEditedName] = useState("");
     const [saving, setSaving] = useState(false);
 
+    // Real Data State
+    const [loadingActivity, setLoadingActivity] = useState(true);
+    const [activities, setActivities] = useState<any[]>([]);
+
     useEffect(() => {
         if (!isAuthenticated && typeof window !== 'undefined') {
             // router.push('/'); 
@@ -25,8 +32,56 @@ export default function ProfilePage() {
     }, [isAuthenticated, router]);
 
     useEffect(() => {
-        if (user) setEditedName(user.name || "");
+        if (user) {
+            setEditedName(user.name || "");
+            fetchMyActivity();
+        }
     }, [user]);
+
+    const fetchMyActivity = async () => {
+        setLoadingActivity(true);
+        try {
+            const [bookings, reservations] = await Promise.all([
+                marketplaceService.getMyBookings(),
+                marketplaceService.getMyReservations()
+            ]);
+
+            // Transform Bookings (Transport & Experiences)
+            const formattedBookings = bookings.map((b: any) => ({
+                id: b.id,
+                type: b.experience ? 'experience' : 'transport',
+                title: b.experience?.title || (b.schedule?.boat?.name ? `Viaje en ${b.schedule.boat.name}` : 'Transporte Fluvial'),
+                date: b.createdAt, // Or schedule departure
+                status: b.status,
+                image: b.experience ? (JSON.parse(b.experience.images || '[]')[0] || '/images/placeholder-jungle.jpg') : '/images/boats/ferry1.jpg', // Fallback for boats
+                details: b.experience ? b.experience.duration : `${b.schedule?.route?.origin} -> ${b.schedule?.route?.destination}`,
+                price: b.totalPrice
+            }));
+
+            // Transform Reservations (Restaurants)
+            const formattedReservations = reservations.map((r: any) => ({
+                id: r.id,
+                type: 'restaurant',
+                title: r.restaurant?.name || 'Restaurante',
+                date: r.requestedDate,
+                status: r.status,
+                image: '/images/gastronomy/juane.jpg', // Generic fallback
+                details: `Reserva para ${r.pax} personas`,
+                price: null
+            }));
+
+            // Combine and Sort
+            const combined = [...formattedBookings, ...formattedReservations].sort((a, b) =>
+                new Date(b.date).getTime() - new Date(a.date).getTime()
+            );
+
+            setActivities(combined);
+        } catch (error) {
+            console.error("Error fetching activity", error);
+        } finally {
+            setLoadingActivity(false);
+        }
+    };
 
     const handleSave = async () => {
         if (!user) return;
@@ -53,12 +108,6 @@ export default function ProfilePage() {
             </main>
         );
     }
-
-    // Mock Activities for the placeholder section
-    const recentActivity = [
-        { id: 1, type: 'booking', title: 'Exploración Río Amazonas', date: '15 Ago 2026', status: 'Confirmado', image: '/images/lodges/1.jpg' },
-        { id: 2, type: 'review', title: 'EcoLodge Selva Profunda', date: '02 Ene 2026', rating: 5, comment: 'Increíble experiencia...', image: '/images/lodges/2.jpg' },
-    ];
 
     return (
         <main className="min-h-screen bg-slate-950 text-slate-200 font-sans selection:bg-emerald-500/30">
@@ -188,43 +237,87 @@ export default function ProfilePage() {
                             )}
                         </div>
 
-                        {/* 2. MY ACTIVITY PLACEHOLDER SECTION */}
-                        <div className="bg-slate-900/50 backdrop-blur-xl border border-white/10 rounded-[2rem] p-8 md:p-10 shadow-lg relative overflow-hidden">
+                        {/* 2. REAL ACTIVITY SECTION */}
+                        <div className="bg-slate-900/50 backdrop-blur-xl border border-white/10 rounded-[2rem] p-8 md:p-10 shadow-lg relative overflow-hidden min-h-[400px]">
                             {/* Decorative Background Pattern */}
                             <div className="absolute top-0 right-0 p-10 opacity-5 pointer-events-none">
                                 <img src="/images/pattern-jungle.png" className="w-64 h-64 object-contain" alt="" />
                             </div>
 
                             <h2 className="text-2xl font-cinzel font-bold text-white mb-8 flex items-center gap-3">
-                                <Calendar className="text-amber-400" /> Mi Actividad Reciente
+                                <Calendar className="text-amber-400" /> Mi Actividad e Historia
                             </h2>
 
-                            <div className="space-y-4">
-                                {recentActivity.map((item) => (
-                                    <div key={item.id} className="group flex items-center gap-4 p-4 rounded-2xl bg-white/5 border border-white/5 hover:bg-white/10 transition-colors cursor-pointer">
-                                        <div className="w-20 h-20 rounded-xl overflow-hidden shrink-0 relative">
-                                            <img src={item.image} alt={item.title} className="w-full h-full object-cover" />
-                                            {item.type === 'booking' && <div className="absolute inset-0 bg-emerald-500/20 flex items-center justify-center"><Calendar className="text-white drop-shadow-md" size={24} /></div>}
-                                            {item.type === 'review' && <div className="absolute inset-0 bg-amber-500/20 flex items-center justify-center"><Star className="text-white drop-shadow-md" size={24} /></div>}
-                                        </div>
-
-                                        <div className="flex-1 min-w-0">
-                                            <div className="flex justify-between items-start mb-1">
-                                                <h3 className="font-bold text-lg text-white truncate group-hover:text-emerald-400 transition-colors">{item.title}</h3>
-                                                {item.status && <Badge className="bg-emerald-500/20 text-emerald-400 border-none">{item.status}</Badge>}
-                                                {item.rating && <div className="flex text-amber-400"><Star size={14} fill="currentColor" /><span className="text-xs ml-1 font-bold">{item.rating}</span></div>}
-                                            </div>
-                                            <p className="text-slate-400 text-sm mb-1">{item.date}</p>
-                                            {item.comment && <p className="text-slate-300 text-sm italic">"{item.comment}"</p>}
-                                        </div>
-                                    </div>
-                                ))}
-
-                                <div className="p-8 text-center border-2 border-dashed border-white/10 rounded-2xl">
-                                    <p className="text-slate-500 mb-2">No hay más actividad reciente</p>
-                                    <Button variant="link" className="text-emerald-400 hover:text-emerald-300">Explorar nuevas expediciones</Button>
+                            {loadingActivity ? (
+                                <div className="flex flex-col items-center justify-center h-48 space-y-4">
+                                    <div className="w-10 h-10 border-4 border-emerald-500/30 border-t-emerald-500 rounded-full animate-spin" />
+                                    <p className="text-slate-500 animate-pulse">Buscando tus reservas...</p>
                                 </div>
-                            </div>
+                            ) : activities.length > 0 ? (
+                                <div className="space-y-4">
+                                    {activities.map((item) => (
+                                        <div key={item.id} className="group flex flex-col md:flex-row items-center gap-6 p-4 rounded-3xl bg-white/5 border border-white/5 hover:bg-white/10 hover:border-emerald-500/30 transition-all cursor-default">
+                                            {/* Image Thumbnail */}
+                                            <div className="w-full md:w-32 h-32 rounded-2xl overflow-hidden shrink-0 relative shadow-lg">
+                                                <img src={item.image} alt={item.title} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
+                                                <div className={`absolute inset-0 flex items-center justify-center bg-black/30 backdrop-blur-[1px]`}>
+                                                    {item.type === 'transport' && <Ship className="text-white drop-shadow-md" size={32} />}
+                                                    {item.type === 'experience' && <Camera className="text-white drop-shadow-md" size={32} />}
+                                                    {item.type === 'restaurant' && <Star className="text-white drop-shadow-md" size={32} />}
+                                                </div>
+                                            </div>
+
+                                            <div className="flex-1 w-full text-center md:text-left">
+                                                <div className="flex flex-col md:flex-row justify-between items-center md:items-start mb-2 gap-2">
+                                                    <h3 className="font-bold text-xl text-white group-hover:text-emerald-400 transition-colors uppercase tracking-wide">{item.title}</h3>
+                                                    <Badge className={`${item.status === 'CONFIRMED' ? 'bg-emerald-500/20 text-emerald-400 border-emerald-500/50' :
+                                                            item.status === 'PENDING' || item.status === 'PENDING_APPROVAL' ? 'bg-amber-500/20 text-amber-400 border-amber-500/50' :
+                                                                'bg-red-500/20 text-red-400 border-red-500/50'
+                                                        }`}>
+                                                        {item.status === 'PENDING_APPROVAL' ? 'PENDIENTE' : item.status}
+                                                    </Badge>
+                                                </div>
+
+                                                <div className="flex flex-col md:flex-row gap-4 text-slate-400 text-sm items-center md:items-start">
+                                                    <div className="flex items-center gap-2">
+                                                        <Calendar size={14} className="text-emerald-500" />
+                                                        <span>{format(new Date(item.date), "d 'de' MMMM, yyyy", { locale: es })}</span>
+                                                    </div>
+                                                    <div className="hidden md:block w-1 h-1 bg-slate-600 rounded-full" />
+                                                    <div className="flex items-center gap-2 text-slate-300">
+                                                        <span>{item.details}</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            {item.price && (
+                                                <div className="text-right pl-4 border-l border-white/10 hidden md:block">
+                                                    <p className="text-xs text-slate-500 uppercase font-bold">Total</p>
+                                                    <p className="text-2xl font-bold text-white">S/. {item.price}</p>
+                                                </div>
+                                            )}
+                                        </div>
+                                    ))}
+                                </div>
+                            ) : (
+                                <div className="p-12 text-center border-2 border-dashed border-white/10 rounded-3xl bg-white/5">
+                                    <div className="bg-slate-800 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 text-slate-600">
+                                        <Camera size={32} />
+                                    </div>
+                                    <h3 className="text-xl font-bold text-white mb-2">Aún no tienes actividad</h3>
+                                    <p className="text-slate-400 mb-6 max-w-md mx-auto">
+                                        Explora la selva, reserva una cena inolvidable o viaja por el río Amazonas. Tus aventuras aparecerán aquí.
+                                    </p>
+                                    <div className="flex flex-wrap justify-center gap-4">
+                                        <Button onClick={() => router.push('/experiences')} variant="outline" className="border-emerald-500/30 text-emerald-400 hover:bg-emerald-500/10 hover:text-emerald-300">
+                                            Ver Expediciones
+                                        </Button>
+                                        <Button onClick={() => router.push('/reservas')} variant="outline" className="border-blue-500/30 text-blue-400 hover:bg-blue-500/10 hover:text-blue-300">
+                                            Reservar Transporte
+                                        </Button>
+                                    </div>
+                                </div>
+                            )}
                         </div>
 
                     </div>

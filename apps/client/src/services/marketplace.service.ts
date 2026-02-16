@@ -67,13 +67,31 @@ export const marketplaceService = {
         }
     },
 
-    updateReservationStatus: async (id: string, status: 'CONFIRMED' | 'REJECTED') => {
+    return response.data;
+} catch (error) {
+    console.error('API Error (Update Reservation):', error);
+    throw error;
+}
+    },
+
+// --- USER SPECIFIC ---
+getMyBookings: async () => {
+    try {
+        const response = await api.get('/bookings/my-bookings');
+        return response.data;
+    } catch (error) {
+        console.error('API Error (Get My Bookings):', error);
+        return [];
+    }
+},
+
+    getMyReservations: async () => {
         try {
-            const response = await api.patch(`/reservations/${id}/status`, { status });
+            const response = await api.get('/reservations/my-reservations');
             return response.data;
         } catch (error) {
-            console.error('API Error (Update Reservation):', error);
-            throw error;
+            console.error('API Error (Get My Reservations):', error);
+            return [];
         }
     },
 };

@@ -61,4 +61,12 @@ export class ReservationsService {
             data: { status },
         });
     }
+
+    async findAllByUser(userId: string) {
+        return this.prisma.restaurantReservation.findMany({
+            where: { userId },
+            include: { restaurant: true },
+            orderBy: { createdAt: 'desc' },
+        });
+    }
 }

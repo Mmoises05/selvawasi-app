@@ -27,4 +27,9 @@ export class ReservationsController {
     ) {
         return this.reservationsService.updateStatus(id, status);
     }
+    @UseGuards(JwtAuthGuard)
+    @Get('my-reservations')
+    findMyReservations(@Request() req: any) {
+        return this.reservationsService.findAllByUser(req.user.userId);
+    }
 }
