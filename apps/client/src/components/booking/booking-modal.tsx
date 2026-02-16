@@ -20,9 +20,10 @@ interface BookingModalProps {
     subtitle?: string;
     type?: 'TRANSPORT' | 'EXPERIENCE';
     date?: Date | undefined;
+    travelers?: number;
 }
 
-export function BookingModal({ isOpen, onClose, scheduleId, price, title, subtitle, image, type = 'TRANSPORT', date }: BookingModalProps & { image?: string }) {
+export function BookingModal({ isOpen, onClose, scheduleId, price, title, subtitle, image, type = 'TRANSPORT', date, travelers }: BookingModalProps & { image?: string }) {
     const { user, isAuthenticated } = useAuth();
     const [isLoading, setIsLoading] = useState(false);
     const [success, setSuccess] = useState(false);
@@ -49,6 +50,10 @@ export function BookingModal({ isOpen, onClose, scheduleId, price, title, subtit
                 // Hack: Store date in seatNumber for now as we lack a date field in Booking model
                 if (date) {
                     bookingData.seatNumber = date.toISOString();
+                }
+                // Store travelers count in passengerName for info
+                if (travelers) {
+                    bookingData.passengerName = `${travelers} ${travelers === 1 ? 'Viajero' : 'Viajeros'}`;
                 }
             } else {
                 bookingData.scheduleId = scheduleId;
@@ -130,6 +135,11 @@ export function BookingModal({ isOpen, onClose, scheduleId, price, title, subtit
                                     {date && (
                                         <p className="text-sm text-emerald-600 font-medium mt-1">
                                             Fecha: {date.toLocaleDateString()}
+                                        </p>
+                                    )}
+                                    {travelers && (
+                                        <p className="text-sm text-slate-500 font-medium">
+                                            Viajeros: {travelers}
                                         </p>
                                     )}
                                 </div>

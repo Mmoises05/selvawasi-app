@@ -25,6 +25,7 @@ import { BookingModal } from "@/components/booking/booking-modal";
 import { cn } from "@/lib/utils";
 import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { format } from "date-fns";
 import { es } from "date-fns/locale";
 
@@ -39,6 +40,7 @@ export default function ExperienceDetailPage() {
     const [authOpen, setAuthOpen] = useState(false);
     const [scrollY, setScrollY] = useState(0);
     const [date, setDate] = useState<Date | undefined>(undefined);
+    const [travelers, setTravelers] = useState(2);
 
     // Parallax Effect
     useEffect(() => {
@@ -264,21 +266,42 @@ export default function ExperienceDetailPage() {
                                 </div>
                                 <div className="space-y-2">
                                     <label className="text-sm text-slate-400 font-bold uppercase tracking-wider ml-1">Viajeros</label>
-                                    <Button variant="outline" className="w-full justify-start h-14 rounded-2xl border-white/10 bg-white/5 text-slate-300 hover:bg-white/10 hover:text-white text-base">
-                                        <Users className="mr-2 h-5 w-5 text-emerald-500" /> 2 Adultos
-                                    </Button>
+                                    <Select value={travelers.toString()} onValueChange={(v) => setTravelers(Number(v))}>
+                                        <SelectTrigger className="w-full h-14 rounded-2xl border-white/10 bg-white/5 text-slate-200 hover:bg-white/10 text-base">
+                                            <div className="flex items-center">
+                                                <Users className="mr-2 h-5 w-5 text-emerald-500" />
+                                                <SelectValue placeholder="Seleccionar" />
+                                            </div>
+                                        </SelectTrigger>
+                                        <SelectContent className="bg-slate-900 border-slate-800 text-slate-200">
+                                            {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(num => (
+                                                <SelectItem key={num} value={num.toString()} className="focus:bg-emerald-500/20 focus:text-white">
+                                                    {num} {num === 1 ? 'Adulto' : 'Adultos'}
+                                                </SelectItem>
+                                            ))}
+                                        </SelectContent>
+                                    </Select>
                                 </div>
 
-                                <Button
-                                    onClick={handleBooking}
-                                    className="w-full h-16 bg-gradient-to-r from-emerald-600 to-teal-500 hover:from-emerald-500 hover:to-teal-400 text-white font-bold rounded-2xl text-lg shadow-xl shadow-emerald-900/20 transform transition-all hover:-translate-y-1"
-                                >
-                                    Reservar Aventura
-                                </Button>
-
-                                <p className="text-xs text-center text-slate-500 mt-4 px-8 leading-relaxed">
-                                    No se realizará ningún cargo hasta que el operador confirme la disponibilidad. Cancelación gratuita hasta 48h antes.
-                                </p>
+                                <div className="pt-4 border-t border-white/5">
+                                    <div className="flex justify-between items-center mb-4">
+                                        <span className="text-slate-400">Total estimada</span>
+                                        <span className="text-2xl font-bold text-white">S/. {(Number(experience.price) * travelers).toFixed(2)}</span>
+                                    </div>
+                                    <Button
+                                        onClick={handleBooking}
+                                        disabled={!date}
+                                        className={cn(
+                                            "w-full h-16 text-white font-bold rounded-2xl text-lg shadow-xl transition-all hover:-translate-y-1",
+                                            date ? "bg-gradient-to-r from-emerald-600 to-teal-500 hover:from-emerald-500 hover:to-teal-400 shadow-emerald-900/20" : "bg-slate-800 text-slate-500 cursor-not-allowed"
+                                        )}
+                                    >
+                                        {date ? "Reservar Aventura" : "Selecciona una fecha"}
+                                    </Button>
+                                    <p className="text-xs text-center text-slate-500 mt-4 px-8 leading-relaxed">
+                                        No se realizará ningún cargo hasta que el operador confirme la disponibilidad. Cancelación gratuita hasta 48h antes.
+                                    </p>
+                                </div>
                             </div>
                         </div>
 
@@ -300,11 +323,12 @@ export default function ExperienceDetailPage() {
                     isOpen={bookingOpen}
                     onClose={() => setBookingOpen(false)}
                     scheduleId={experience.id}
-                    price={Number(experience.price)}
+                    price={Number(experience.price) * travelers}
                     title={experience.title}
                     subtitle="Experiencia Amazónica Premium"
                     type="EXPERIENCE"
                     date={date}
+                    travelers={travelers}
                 // Pass image for modal visual context if supported
                 />
             )}
