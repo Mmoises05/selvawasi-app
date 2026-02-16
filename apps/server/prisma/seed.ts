@@ -180,7 +180,7 @@ async function main() {
             price: 450.00,
             duration: '3 Días / 2 Noches',
             location: 'Reserva Pacaya Samiria',
-            images: JSON.stringify(['/images/lodges/lodge-1.jpg', '/images/lodges/lodge-2.jpg']), // Using local images
+            images: JSON.stringify(['/images/lodges/eco-1.jpg', '/images/lodges/eco-2.jpg']), // Using local images
             operatorId: operatorProfile.id
         },
         {
@@ -190,7 +190,7 @@ async function main() {
             price: 1200.00,
             duration: '4 Días / 3 Noches',
             location: 'Río Amazonas - Sector Iquitos',
-            images: JSON.stringify(['/images/lodges/lodge-2.jpg', '/images/lodges/lodge-3.jpg']),
+            images: JSON.stringify(['/images/lodges/eco-2.jpg', '/images/lodges/eco-3.jpg']),
             operatorId: operatorProfile.id
         },
         {
@@ -200,7 +200,7 @@ async function main() {
             price: 680.00,
             duration: '3 Días / 2 Noches',
             location: 'Selva Alta',
-            images: JSON.stringify(['/images/lodges/lodge-3.jpg', '/images/lodges/lodge-4.jpg']),
+            images: JSON.stringify(['/images/lodges/eco-3.jpg', '/images/lodges/eco-4.jpg']),
             operatorId: operatorProfile.id
         },
         {
@@ -210,7 +210,7 @@ async function main() {
             price: 550.00,
             duration: '5 Días / 4 Noches',
             location: 'Laguna Quistococha',
-            images: JSON.stringify(['/images/lodges/lodge-4.jpg', '/images/lodges/lodge-5.jpg']),
+            images: JSON.stringify(['/images/lodges/eco-4.jpg', '/images/lodges/eco-5.jpg']),
             operatorId: operatorProfile.id
         }
     ];
