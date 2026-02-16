@@ -1,8 +1,16 @@
+import 'reflect-metadata';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
+import * as fs from 'fs';
 
 async function bootstrap() {
   try {
+    console.log('Current Directory:', process.cwd());
+    console.log('Directory contents:', fs.readdirSync('.'));
+    try {
+      console.log('Dist contents:', fs.readdirSync('./dist'));
+    } catch (e) { console.log('No dist folder found!'); }
+
     console.log('Starting NestJS application...');
     const app = await NestFactory.create(AppModule);
     app.enableCors({
