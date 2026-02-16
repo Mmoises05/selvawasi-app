@@ -18,9 +18,10 @@ async function bootstrap() {
       methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
       credentials: false,
     });
-    // Use the PORT environment variable if available, otherwise default to 4000 (Railway's config)
-    const port = process.env.PORT || 4000;
-    console.log(`env.PORT is: ${process.env.PORT}`);
+    // CRITICAL FIX: Ignore process.env.PORT because Railway Nixpacks injects 8080
+    // but the Railway Service Proxy is configured for 4000.
+    const port = 4000;
+    console.log(`IGNORING env.PORT (${process.env.PORT}) - FORCING PORT 4000`);
     console.log(`Binding to port: ${port}`);
 
     // Force binding to 0.0.0.0 (Standard for Railway/Docker)
