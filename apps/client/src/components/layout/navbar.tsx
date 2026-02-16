@@ -103,9 +103,11 @@ export function Navbar({ className, variant = "default" }: { className?: string;
                                         </>
                                     )}
 
-                                    <DropdownMenuItem className="focus:bg-white/10 cursor-pointer">
-                                        <User className="mr-2 h-4 w-4" />
-                                        <span>Mi Perfil</span>
+                                    <DropdownMenuItem asChild className="focus:bg-white/10 cursor-pointer">
+                                        <Link href="/profile" className="flex items-center w-full">
+                                            <User className="mr-2 h-4 w-4" />
+                                            <span>Mi Perfil</span>
+                                        </Link>
                                     </DropdownMenuItem>
 
                                     <DropdownMenuSeparator className="bg-white/10" />
