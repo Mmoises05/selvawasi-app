@@ -21,9 +21,16 @@ async function bootstrap() {
     const port = process.env.PORT || 3000;
     console.log(`env.PORT is: ${process.env.PORT}`);
     console.log(`Listening on port: ${port}`);
-    // Allow default binding (IPv6/IPv4 dual stack usually)
-    await app.listen(port);
+
+    // Force binding to 0.0.0.0 for container accessibility
+    await app.listen(port, '0.0.0.0');
+
     console.log(`Application is running on: ${await app.getUrl()}`);
+
+    // Heartbeat to confirm process vitality in logs
+    setInterval(() => {
+      console.log(`[${new Date().toISOString()}] Server is alive and listening...`);
+    }, 10000);
   } catch (error) {
     console.error('Error starting application:', error);
     process.exit(1);

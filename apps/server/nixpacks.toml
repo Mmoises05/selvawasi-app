@@ -1,8 +1,0 @@
-[phases.setup]
-nixPkgs = ["nodejs-18_x", "npm-9_x"]
-
-[phases.build]
-cmds = ["npm install --legacy-peer-deps --production=false", "npx prisma generate", "npm run build"]
-
-[start]
-cmd = "npm run start:prod"
