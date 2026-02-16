@@ -20,16 +20,18 @@ async function bootstrap() {
     });
     const port = process.env.PORT || 3000;
     console.log(`env.PORT is: ${process.env.PORT}`);
-    console.log(`Listening on port: ${port}`);
 
-    // Force binding to 0.0.0.0 for container accessibility
-    await app.listen(port, '0.0.0.0');
+    // Bind to IPv6 any address (covers IPv4 mapped usually)
+    const server = await app.listen(port, '::');
 
+    // Log the actual address we are listening on
+    const address = server.address();
+    console.log(`Server listening on:`, address);
     console.log(`Application is running on: ${await app.getUrl()}`);
 
-    // Heartbeat to confirm process vitality in logs
+    // Heartbeat
     setInterval(() => {
-      console.log(`[${new Date().toISOString()}] Server is alive and listening...`);
+      console.log(`[${new Date().toISOString()}] Server is alive. Address:`, server.address());
     }, 10000);
   } catch (error) {
     console.error('Error starting application:', error);
