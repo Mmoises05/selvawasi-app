@@ -19,4 +19,16 @@ async function bootstrap() {
     process.exit(1);
   }
 }
+
+// Global error handlers to capture crash reasons
+process.on('uncaughtException', (err) => {
+  console.error('Uncaught Exception:', err);
+  process.exit(1);
+});
+
+process.on('unhandledRejection', (reason, promise) => {
+  console.error('Unhandled Rejection at:', promise, 'reason:', reason);
+  process.exit(1);
+});
+
 bootstrap();
