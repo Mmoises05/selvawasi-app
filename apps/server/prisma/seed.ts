@@ -171,6 +171,75 @@ async function main() {
         });
     }
 
+    // 7. Create Ecotourism Experiences (Lodges)
+    const experiencesData = [
+        {
+            id: 'exp-selva-profunda',
+            title: 'EcoLodge Selva Profunda',
+            description: 'Sumérgete en el corazón de la Amazonía. Cabañas rústicas pero confortables, rodeadas de vida silvestre. Incluye caminatas nocturnas y avistamiento de aves.',
+            price: 450.00,
+            duration: '3 Días / 2 Noches',
+            location: 'Reserva Pacaya Samiria',
+            images: JSON.stringify(['/images/lodges/lodge-1.jpg', '/images/lodges/lodge-2.jpg']), // Using local images
+            operatorId: operatorProfile.id
+        },
+        {
+            id: 'exp-amazon-lux',
+            title: 'Amazon River Luxury',
+            description: 'Experiencia premium a orillas del río Amazonas. Disfruta de atardeceres inolvidables desde tu suite privada con todas las comodidades.',
+            price: 1200.00,
+            duration: '4 Días / 3 Noches',
+            location: 'Río Amazonas - Sector Iquitos',
+            images: JSON.stringify(['/images/lodges/lodge-2.jpg', '/images/lodges/lodge-3.jpg']),
+            operatorId: operatorProfile.id
+        },
+        {
+            id: 'exp-canopy-adventure',
+            title: 'Canopy Treehouse Adventure',
+            description: 'Duerme en la copa de los árboles. Una aventura única para conectar con la naturaleza desde las alturas. Puentes colgantes y tirolesa incluidos.',
+            price: 680.00,
+            duration: '3 Días / 2 Noches',
+            location: 'Selva Alta',
+            images: JSON.stringify(['/images/lodges/lodge-3.jpg', '/images/lodges/lodge-4.jpg']),
+            operatorId: operatorProfile.id
+        },
+        {
+            id: 'exp-laguna-mistica',
+            title: 'Refugio Laguna Mística',
+            description: 'Un santuario de paz frente a una laguna espejo. Ideal para yoga, meditación y desconexión total. Comida orgánica y excursiones en canoa.',
+            price: 550.00,
+            duration: '5 Días / 4 Noches',
+            location: 'Laguna Quistococha',
+            images: JSON.stringify(['/images/lodges/lodge-4.jpg', '/images/lodges/lodge-5.jpg']),
+            operatorId: operatorProfile.id
+        }
+    ];
+
+    for (const exp of experiencesData) {
+        await prisma.experience.upsert({
+            where: { id: exp.id },
+            update: {
+                title: exp.title,
+                description: exp.description,
+                price: exp.price,
+                duration: exp.duration,
+                location: exp.location,
+                images: exp.images,
+                operatorId: exp.operatorId
+            },
+            create: {
+                id: exp.id,
+                title: exp.title,
+                description: exp.description,
+                price: exp.price,
+                duration: exp.duration,
+                location: exp.location,
+                images: exp.images,
+                operatorId: exp.operatorId
+            }
+        });
+    }
+
     console.log('Seeding finished.');
 }
 
