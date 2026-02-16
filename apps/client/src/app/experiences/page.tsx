@@ -69,10 +69,10 @@ export default function ExperiencesPage() {
                 const data = await marketplaceService.getExperiences();
                 // RADICAL FIX: Force Hardcoded Images based on ID to bypass DB inconsistencies
                 const FORCE_IMAGES: Record<string, string[]> = {
-                    'exp-selva-profunda': ['/images/lodges/eco-20.jpg', '/images/lodges/eco-21.jpg'],
-                    'exp-amazon-lux': ['/images/lodges/eco-21.jpg', '/images/lodges/eco-22.jpg'],
-                    'exp-canopy-adventure': ['/images/lodges/eco-22.jpg', '/images/lodges/eco-23.jpg'],
-                    'exp-laguna-mistica': ['/images/lodges/eco-23.jpg', '/images/lodges/eco-24.jpg']
+                    'exp-selva-profunda': ['/images/lodges/1.jpg', '/images/lodges/2.jpg'],
+                    'exp-amazon-lux': ['/images/lodges/2.jpg', '/images/lodges/3.jpg'],
+                    'exp-canopy-adventure': ['/images/lodges/3.jpg', '/images/lodges/4.jpg'],
+                    'exp-laguna-mistica': ['/images/lodges/4.jpg', '/images/lodges/5.jpg']
                 };
 
                 // Enhance data for UI
