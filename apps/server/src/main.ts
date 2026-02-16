@@ -21,10 +21,10 @@ async function bootstrap() {
     const port = process.env.PORT || 3000;
     console.log(`env.PORT is: ${process.env.PORT}`);
 
-    // Bind to IPv6 any address (covers IPv4 mapped usually)
-    const server = await app.listen(port, '::');
+    // Force binding to 0.0.0.0 (Standard for Railway/Docker)
+    await app.listen(port, '0.0.0.0');
 
-    // Log the actual address we are listening on
+    const server = app.getHttpServer();
     const address = server.address();
     console.log(`Server listening on:`, address);
     console.log(`Application is running on: ${await app.getUrl()}`);
