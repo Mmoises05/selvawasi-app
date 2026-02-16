@@ -66,6 +66,7 @@ export const marketplaceService = {
             return []; // Fallback empty for now
         }
     },
+
     updateReservationStatus: async (id: string, status: 'CONFIRMED' | 'REJECTED') => {
         try {
             const response = await api.patch(`/reservations/${id}/status`, { status });
