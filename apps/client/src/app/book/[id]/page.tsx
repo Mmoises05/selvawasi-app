@@ -97,7 +97,7 @@ export default function BookingPage() {
         origin: schedule.route?.origin || 'Origen',
         destination: schedule.route?.destination || 'Destino',
         time: schedule.departureTime ? new Date(schedule.departureTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : '--:--',
-        date: schedule.departureTime ? new Date(schedule.departureTime).toLocaleDateString : '',
+        date: schedule.departureTime ? new Date(schedule.departureTime).toLocaleDateString() : '',
         rawDate: schedule.departureTime,
         price: schedule.prices?.[0]?.amount ? Number(schedule.prices[0].amount) : 0,
         company: schedule.boat?.name || 'Transporte',
