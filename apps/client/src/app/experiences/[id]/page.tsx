@@ -13,7 +13,7 @@ import {
     Star,
     ShieldCheck,
     Info,
-    Calendar,
+    Calendar as CalendarIcon,
     Users,
     CheckCircle2,
     Share2,
@@ -23,6 +23,10 @@ import { AuthModal } from "@/components/auth/auth-modal";
 import { useAuth } from "@/context/auth-context";
 import { BookingModal } from "@/components/booking/booking-modal";
 import { cn } from "@/lib/utils";
+import { Calendar } from "@/components/ui/calendar";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { format } from "date-fns";
+import { es } from "date-fns/locale";
 
 export default function ExperienceDetailPage() {
     const params = useParams();
@@ -34,6 +38,7 @@ export default function ExperienceDetailPage() {
     const [bookingOpen, setBookingOpen] = useState(false);
     const [authOpen, setAuthOpen] = useState(false);
     const [scrollY, setScrollY] = useState(0);
+    const [date, setDate] = useState<Date | undefined>(undefined);
 
     // Parallax Effect
     useEffect(() => {
@@ -235,9 +240,27 @@ export default function ExperienceDetailPage() {
                             <div className="space-y-6">
                                 <div className="space-y-2">
                                     <label className="text-sm text-slate-400 font-bold uppercase tracking-wider ml-1">Fecha</label>
-                                    <Button variant="outline" className="w-full justify-start h-14 rounded-2xl border-white/10 bg-white/5 text-slate-300 hover:bg-white/10 hover:text-white text-base">
-                                        <Calendar className="mr-2 h-5 w-5 text-emerald-500" /> Seleccionar Fecha
-                                    </Button>
+                                    <Popover>
+                                        <PopoverTrigger asChild>
+                                            <Button variant="outline" className={cn(
+                                                "w-full justify-start h-14 rounded-2xl border-white/10 bg-white/5 text-left text-base hover:bg-white/10 hover:text-white",
+                                                !date && "text-slate-400"
+                                            )}>
+                                                <CalendarIcon className="mr-2 h-5 w-5 text-emerald-500" />
+                                                {date ? format(date, "PPP", { locale: es }) : "Seleccionar Fecha"}
+                                            </Button>
+                                        </PopoverTrigger>
+                                        <PopoverContent className="w-auto p-0 bg-slate-900 border-slate-800" align="start">
+                                            <Calendar
+                                                mode="single"
+                                                selected={date}
+                                                onSelect={setDate}
+                                                initialFocus
+                                                disabled={(date) => date < new Date()}
+                                                className="rounded-xl border border-slate-800 text-slate-200"
+                                            />
+                                        </PopoverContent>
+                                    </Popover>
                                 </div>
                                 <div className="space-y-2">
                                     <label className="text-sm text-slate-400 font-bold uppercase tracking-wider ml-1">Viajeros</label>
@@ -281,6 +304,7 @@ export default function ExperienceDetailPage() {
                     title={experience.title}
                     subtitle="Experiencia Amazónica Premium"
                     type="EXPERIENCE"
+                    date={date}
                 // Pass image for modal visual context if supported
                 />
             )}

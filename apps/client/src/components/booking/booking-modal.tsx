@@ -19,9 +19,10 @@ interface BookingModalProps {
     title: string; // e.g. "Viaje Iquitos - Nauta"
     subtitle?: string;
     type?: 'TRANSPORT' | 'EXPERIENCE';
+    date?: Date | undefined;
 }
 
-export function BookingModal({ isOpen, onClose, scheduleId, price, title, subtitle, image, type = 'TRANSPORT' }: BookingModalProps & { image?: string }) {
+export function BookingModal({ isOpen, onClose, scheduleId, price, title, subtitle, image, type = 'TRANSPORT', date }: BookingModalProps & { image?: string }) {
     const { user, isAuthenticated } = useAuth();
     const [isLoading, setIsLoading] = useState(false);
     const [success, setSuccess] = useState(false);
@@ -45,6 +46,10 @@ export function BookingModal({ isOpen, onClose, scheduleId, price, title, subtit
 
             if (type === 'EXPERIENCE') {
                 bookingData.experienceId = scheduleId;
+                // Hack: Store date in seatNumber for now as we lack a date field in Booking model
+                if (date) {
+                    bookingData.seatNumber = date.toISOString();
+                }
             } else {
                 bookingData.scheduleId = scheduleId;
             }
@@ -122,6 +127,11 @@ export function BookingModal({ isOpen, onClose, scheduleId, price, title, subtit
                                 <div>
                                     <p className="text-xs uppercase tracking-widest text-slate-400 font-bold mb-1">Itinerario</p>
                                     <h4 className="font-bold text-xl text-slate-900 leading-tight">{title}</h4>
+                                    {date && (
+                                        <p className="text-sm text-emerald-600 font-medium mt-1">
+                                            Fecha: {date.toLocaleDateString()}
+                                        </p>
+                                    )}
                                 </div>
                                 <div className="text-right">
                                     <p className="text-xs uppercase tracking-widest text-slate-400 font-bold mb-1">Total</p>
