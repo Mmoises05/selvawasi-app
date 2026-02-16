@@ -18,8 +18,10 @@ async function bootstrap() {
       methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
       credentials: false,
     });
-    const port = process.env.PORT || 3000;
+    // Use the PORT environment variable if available, otherwise default to 4000 (Railway's config)
+    const port = process.env.PORT || 4000;
     console.log(`env.PORT is: ${process.env.PORT}`);
+    console.log(`Binding to port: ${port}`);
 
     // Force binding to 0.0.0.0 (Standard for Railway/Docker)
     await app.listen(port, '0.0.0.0');
