@@ -5,4 +5,4 @@ nixPkgs = ["nodejs-18_x", "npm-9_x"]
 cmds = ["npm ci --legacy-peer-deps", "npx prisma generate", "npm run build"]
 
 [start]
-cmd = "echo 'Starting Migration...' && npx prisma migrate deploy && echo 'Migration Done. Starting Server...' && npm run start:prod"
+cmd = "ls -R . && echo 'Starting Migration...' && npx prisma migrate deploy && echo 'Migration Done. Starting Server...' && npm run start:prod"
