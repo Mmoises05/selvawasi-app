@@ -18,9 +18,11 @@ async function bootstrap() {
       methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
       credentials: false,
     });
-    const port = process.env.PORT ?? 4000;
+    const port = process.env.PORT || 3000;
+    console.log(`env.PORT is: ${process.env.PORT}`);
     console.log(`Listening on port: ${port}`);
-    await app.listen(port, '0.0.0.0');
+    // Allow default binding (IPv6/IPv4 dual stack usually)
+    await app.listen(port);
     console.log(`Application is running on: ${await app.getUrl()}`);
   } catch (error) {
     console.error('Error starting application:', error);
