@@ -67,20 +67,33 @@ export default function ExperiencesPage() {
             setLoading(true);
             try {
                 const data = await marketplaceService.getExperiences();
+                // RADICAL FIX: Force Hardcoded Images based on ID to bypass DB inconsistencies
+                const FORCE_IMAGES: Record<string, string[]> = {
+                    'exp-selva-profunda': ['/images/lodges/eco-20.jpg', '/images/lodges/eco-21.jpg'],
+                    'exp-amazon-lux': ['/images/lodges/eco-21.jpg', '/images/lodges/eco-22.jpg'],
+                    'exp-canopy-adventure': ['/images/lodges/eco-22.jpg', '/images/lodges/eco-23.jpg'],
+                    'exp-laguna-mistica': ['/images/lodges/eco-23.jpg', '/images/lodges/eco-24.jpg']
+                };
+
                 // Enhance data for UI
                 const enhanced = data.map((exp: any) => {
                     let parsedImages = [];
-                    try {
-                        // Handle if it's already an array or a JSON string
-                        parsedImages = Array.isArray(exp.images) ? exp.images : JSON.parse(exp.images || '[]');
-                    } catch (e) {
-                        console.error("Error parsing images for", exp.title, e);
+
+                    // 1. Check Forced Images first (Priority)
+                    if (FORCE_IMAGES[exp.id]) {
+                        parsedImages = FORCE_IMAGES[exp.id];
+                    } else {
+                        // 2. Fallback to DB logic
+                        try {
+                            parsedImages = Array.isArray(exp.images) ? exp.images : JSON.parse(exp.images || '[]');
+                        } catch (e) {
+                            console.error("Error parsing images for", exp.title, e);
+                        }
                     }
 
                     // Fallbacks if empty
                     if (parsedImages.length === 0) {
                         parsedImages = ['/images/placeholder-jungle.jpg'];
-                        // Or use a known existing image if placeholder is missing
                         if (exp.title.includes('Monos')) parsedImages = ['/images/hanging-monkey.png'];
                     }
 
