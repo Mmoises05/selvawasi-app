@@ -1,4 +1,5 @@
 'use client';
+// Restaurando nucleo del bot original - Macaw v1
 
 import { useState, useRef, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
