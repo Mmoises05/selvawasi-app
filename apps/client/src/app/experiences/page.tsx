@@ -42,8 +42,8 @@ interface Experience {
 }
 
 const COLLECTIONS = [
-    { title: "Avistamiento de Fauna", icon: Binoculars, color: "from-emerald-500 to-green-600", image: "/images/hanging-monkey.png" },
-    { title: "Fotografía Salvaje", icon: Camera, color: "from-sky-500 to-blue-600", image: "/images/jaguar-running.png" },
+    { title: "Avistamiento de Fauna", icon: Binoculars, color: "from-emerald-500 to-green-600", image: "/images/avistamiento.jpg" },
+    { title: "Fotografía Salvaje", icon: Camera, color: "from-sky-500 to-blue-600", image: "/images/fotografia-salvaje.jpg" },
     { title: "Aventuras al Amanecer", icon: Sunrise, color: "from-amber-500 to-orange-600", image: "/images/vista-al-rio.jpg" },
     { title: "Inmersión Cultural", icon: Compass, color: "from-indigo-500 to-purple-600", image: "/images/iquitos-plaza.jpg" },
 ];
