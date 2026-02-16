@@ -11,6 +11,7 @@ import { RestaurantsModule } from './restaurants/restaurants.module';
 import { ExperiencesModule } from './experiences/experiences.module';
 import { BookingsModule } from './bookings/bookings.module';
 import { AiModule } from './ai/ai.module';
+import { AdminModule } from './admin/admin.module';
 import { DebugModule } from './debug/debug.module';
 
 @Module({
